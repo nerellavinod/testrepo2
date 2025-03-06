@@ -69,7 +69,7 @@ steps:
 
 - task: AzureCLI@2
   inputs:
-    azureSubscription: 'acrserviceconnectionmanual'
+    azureSubscription: 'acrserviceconnectionmanuall'
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
