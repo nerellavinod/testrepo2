@@ -6,7 +6,7 @@ pool:
 
 variables:
   imageName: 'mycontainerapp'
-  acrName: 'testacr11231'
+  acrName: 'testexampleregistryvin'
 
 steps:
 - task: UseDotNet@2
@@ -39,8 +39,8 @@ steps:
 
 # Step 3: Tag Docker Image (optional but useful for pushing)
 - script: |
-    docker tag $(imageName):$(Build.BuildId) testacr11231.azurecr.io/$(imageName):latest
-    docker tag $(imageName):$(Build.BuildId) testacr11231.azurecr.io/$(imageName):$(Build.BuildId)
+    docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):latest
+    docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
   displayName: 'Tag Docker Image'
 
 # Step 1: Azure CLI login using Managed Identity
@@ -73,9 +73,9 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az acr login --name testacr11231
-      docker push testacr11231.azurecr.io/$(imageName):latest
-      docker push testacr11231.azurecr.io/$(imageName):$(Build.BuildId)
+      az acr login --name testexampleregistryvin
+      docker push testexampleregistryvin.azurecr.io/$(imageName):latest
+      docker push testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
   displayName: 'Push Docker Image to ACR'
 
 # Step 5: Deploy to Azure Container App using Azure CLI
