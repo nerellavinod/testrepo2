@@ -135,5 +135,5 @@ stages:
         inlineScript: |
           az --version
 
-    - template: continuous-deployment.yml
+    - template: Deployment/templates/continuous-deployment.yml
 
