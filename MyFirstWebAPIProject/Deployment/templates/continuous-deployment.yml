@@ -27,17 +27,13 @@ parameters:
   - name: AzureSubscription
     type: string
 
-jobs:
-- job: Terraform
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: self
+steps:
 
   - task: PowerShell@2
-    displayName: "terraform $(Environment) deploy"
+    displayName: "terraformdeploy"
     name: TerraformDeploy
     inputs:
+      azureSubscription: 'acrserviceconnectionmanuall'
       targetType: filePath
       filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
-      arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+      arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
