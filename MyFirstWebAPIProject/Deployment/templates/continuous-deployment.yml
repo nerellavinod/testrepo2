@@ -29,11 +29,16 @@ parameters:
 
 steps:
 
-  - task: PowerShell@2
+  - task: AzureCLI@2
     displayName: "terraformdeploy"
     name: TerraformDeploy
     inputs:
-      azureSubscription: 'acrserviceconnectionmanuall'
-      targetType: filePath
-      filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
-      arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+      scriptType: 'pscore'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+            az --version
+            pwsh terraform_conditional_run.ps1 -deploymentResourceGroupName "testexample-resources-vin" -deploymentStorageAccountName "teststorageaccount12345v" -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json
+      # azureSubscription: 'acrserviceconnectionmanuall'
+      # targetType: filePath
+      # filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
+      # arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed $${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
