@@ -1,5 +1,6 @@
 trigger:
 - main
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -10,111 +11,53 @@ variables:
   Container: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.9.2"
   Environment: "Devtest"
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+stages:
+- stage: Build
+  jobs:
+  - job: BuildDockerImage
+    steps:
+    - task: UseDotNet@2
+      inputs:
+        packageType: 'sdk'
+        version: '8.x'
+        installationPath: $(Agent.ToolsDirectory)/dotnet
 
-# Step 1: List contents of MyConsoleApp to verify the Dockerfile exists
-- script: |
-    ls -R
-    ls /home/vsts/work/1/s/MyFirstWebAPIProject/Dockerfile
-  displayName: 'List MyConsoleApp Contents'
+    - script: |
+        ls -R
+        ls /home/vsts/work/1/s/MyFirstWebAPIProject/Dockerfile
+      displayName: 'List MyConsoleApp Contents'
 
-- script: |
-    if ! command -v docker &> /dev/null
-    then
-        echo "Docker could not be found"
-        exit 1
-    else
-        echo "Docker is installed"
-        docker version
-    fi
-  displayName: 'Check Docker Installation and Version'
+    - script: |
+        if ! command -v docker &> /dev/null
+        then
+            echo "Docker could not be found"
+            exit 1
+        else
+            echo "Docker is installed"
+            docker version
+        fi
+      displayName: 'Check Docker Installation and Version'
 
-# Step 2: Build Docker Image (with corrected context)
-- script: |
-    docker build -t $(imageName):$(Build.BuildId) -f '$(Build.SourcesDirectory)/MyFirstWebAPIProject/Dockerfile' $(Build.SourcesDirectory)
-  displayName: 'Build Docker Image'
+    - script: |
+        docker build -t $(imageName):$(Build.BuildId) -f '$(Build.SourcesDirectory)/MyFirstWebAPIProject/Dockerfile' $(Build.SourcesDirectory)
+      displayName: 'Build Docker Image'
 
-# Step 3: Tag Docker Image (optional but useful for pushing)
-- script: |
-    docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):latest
-    docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
-  displayName: 'Tag Docker Image'
+    - script: |
+        docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):latest
+        docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
+      displayName: 'Tag Docker Image'
 
-# Step 1: Azure CLI login using Managed Identity
-#- task: AzureCLI@2
-#  inputs:
-#    azureSubscription: 'acrserviceconnection'  # Your Azure DevOps service connection to the subscription
-#    scriptType: 'bash'  # Use bash to run commands
-#    scriptLocation: 'inlineScript'  # Inline script execution
-#    inlineScript: |
-#      # Login to Azure Container Registry using Managed Identity
-#      az acr login --name $(acrName)
-#  displayName: 'Login to ACR using Managed Identity'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'acrserviceconnectionmanuall'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az acr login --name testexampleregistryvin
+          docker push testexampleregistryvin.azurecr.io/$(imageName):latest
+          docker push testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
+      displayName: 'Push Docker Image to ACR'
 
-#- task: Docker@2 -- Required selfhosted agent
-#  inputs:
-#    containerRegistry: 'acrconnection'
-#    azureSubscription: 'acrserviceconnection'
-#    azureResourceManagerConnection: 'acrserviceconnection'
-#    azureContainerRegistry: 'acrsqmbqafc.azurecr.io'
-#    authenticationType: 'ManagedIdentity'
-#    managedIdentity: 'd4df28ea-176b-4a7b-8b65-90ba28838641'    
-#    repository: '$(imageName)'
-#    command: 'push'
-#    tags: |
-#      $(Build.BuildId)
-
-- task: AzureCLI@2
-  inputs:
-    azureSubscription: 'acrserviceconnectionmanuall'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az acr login --name testexampleregistryvin
-      docker push testexampleregistryvin.azurecr.io/$(imageName):latest
-      docker push testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
-  displayName: 'Push Docker Image to ACR'
-
-# Step 5: Deploy to Azure Container App using Azure CLI
-#- task: AzureCLI@2
-#  inputs:
-#    azureSubscription: 'acrserviceconnection'
-#    scriptType: 'bash'
-#    scriptLocation: 'inlineScript'
-#    inlineScript: |
-#      az containerapp update \
-#        --name container-app-sqmbqafc \
-#        --resource-group containerrg \
-#        --image acrsqmbqafc.azurecr.io/$(imageName):latest                            
-#  displayName: 'Deploy to Azure Container App'
-
-################################
-# - stage: Devdeploy
-#   displayName: "Devdeploy (inc terraform, webapp deploy)"
-#   variables:
-         
-#   jobs:
-#     - deployment: DevDeployTerraform
-#       displayName: "Dev - Deploy Terraform"
-#       pool: $(DeploymentPool)
-#       container: ${{variables.Container}}
-#       workspace:
-#         clean: all
-#       strategy:
-#         runOnce:
-#           deploy:
-#             steps:
-#               - template: Deployment/templates/continuous-deployment.yml
-#                 parameters:
-#                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-#                   AzureSubscription: "acrserviceconnectionmanuall"
-
-###############
 - stage: Deploy
   jobs:
   - job: TerraformDeployment
@@ -135,4 +78,5 @@ steps:
           az --version
 
     - template: Deployment/templates/continuous-deployment.yml
-
+      parameters:
+        azureSubscription: 'acrserviceconnectionmanuall'
