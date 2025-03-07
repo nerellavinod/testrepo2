@@ -13,6 +13,7 @@ variables:
   DeploymentResourceGroupName: "testexample-resources-vin"
   DeploymentStorageAccountName: "teststorageaccount12345v"
   Location: "West Europe"
+  TerraformDirectory: "MyFirstWebAPIProject/Deployment"
   
 stages:
 - stage: Build
@@ -84,3 +85,6 @@ stages:
       parameters:
         AzureSubscription: 'acrserviceconnectionmanuall'
         ContinueEvenIfResourcesAreGettingDestroyed: false
+        ResourceGroupName: $(DeploymentResourceGroupName)
+        Location: $(Location)
+        TerraformDirectory: $(TerraformDirectory)
