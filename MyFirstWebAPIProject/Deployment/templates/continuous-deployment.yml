@@ -40,7 +40,7 @@ steps:
     name: TerraformDeploy
     inputs:
       targetType: filePath
-      filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
+      filePath: 'MyFirstWebAPIProject/Deployment/terraform_conditional_run.ps1'
       arguments: '-ResourceGroupName ${{ parameters.ResourceGroupName }} -Location ${{ parameters.Location }} -TerraformDirectory ${{ parameters.TerraformDirectory }} -deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
 
   - task: AzureCLI@2
