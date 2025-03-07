@@ -1,8 +1,9 @@
-
 stages:
-- stage: Terrafrom stage start
+- stage: TerraformStageStart
   jobs:
   - job: Terraform
+    pool:
+      vmImage: 'ubuntu-latest'
     steps:
     - checkout: self
 
