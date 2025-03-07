@@ -33,6 +33,7 @@ steps:
     displayName: "terraformdeploy"
     name: TerraformDeploy
     inputs:
+      azureSubscription: "acrserviceconnectionmanuall"
       scriptType: 'pscore'
       scriptLocation: 'inlineScript'
       inlineScript: |
