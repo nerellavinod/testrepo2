@@ -6,6 +6,9 @@ pool:
 variables:
   imageName: 'mycontainerapp'
   acrName: 'testexampleregistryvin'
+  DeploymentPool: "Mare Nectaris"
+  Container: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.9.2"
+  Environment: "Devtest"
 
 steps:
 - task: UseDotNet@2
@@ -91,24 +94,46 @@ steps:
 #  displayName: 'Deploy to Azure Container App'
 
 ################################
-- stage: Devdeploy
-  displayName: "Devdeploy (inc terraform, webapp deploy)"
-  variables:
+# - stage: Devdeploy
+#   displayName: "Devdeploy (inc terraform, webapp deploy)"
+#   variables:
          
+#   jobs:
+#     - deployment: DevDeployTerraform
+#       displayName: "Dev - Deploy Terraform"
+#       pool: $(DeploymentPool)
+#       container: ${{variables.Container}}
+#       workspace:
+#         clean: all
+#       strategy:
+#         runOnce:
+#           deploy:
+#             steps:
+#               - template: Deployment/templates/continuous-deployment.yml
+#                 parameters:
+#                   ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+#                   AzureSubscription: "acrserviceconnectionmanuall"
+
+###############
+stages:
+- stage: Deploy
   jobs:
-    - deployment: DevDeployTerraform
-      displayName: "Dev - Deploy Terraform"
-      environment: "S100PG-DEV"
-      pool: $(DeploymentPool)
-      container: ${{variables.Container}}
-      workspace:
-        clean: all
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - template: Deployment/templates/continuous-deployment.yml
-                parameters:
-                  ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
-                  AzureSubscription: "S-100 Permit Generator Dev - A.011.15.5"
+  - job: TerraformDeployment
+    steps:
+    - checkout: self
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '3.x'
+        addToPath: true
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: "acrserviceconnectionmanuall"
+        scriptType: 'pscore'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az --version
+
+    - template: continuous-deployment.yml
 
