@@ -1,9 +1,5 @@
 trigger:
 - main
-name: Manual Workflow
-on:
-  workflow_dispatch:
-
 pool:
   vmImage: 'ubuntu-latest'
 
