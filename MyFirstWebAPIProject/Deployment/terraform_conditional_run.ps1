@@ -1,6 +1,7 @@
 param (
     [string]$ResourceGroupName,
     [string]$Location,
+    [string]$TerraformDirectory
   )
 
 # Ensure the required parameters are provided
