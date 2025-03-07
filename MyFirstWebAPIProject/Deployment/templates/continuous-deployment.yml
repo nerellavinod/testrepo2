@@ -1,21 +1,39 @@
-stages:
-- stage: TerraformStageStart
-  jobs:
-  - job: Terraform
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - checkout: self
+# stages:
+# - stage: TerraformStageStart
+#   jobs:
+#   - job: Terraform
+#     pool:
+#       vmImage: 'ubuntu-latest'
+#     steps:
+#     - checkout: self
 
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '3.x'
-        addToPath: true
+#     - task: UsePythonVersion@0
+#       inputs:
+#         versionSpec: '3.x'
+#         addToPath: true
 
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'acrserviceconnectionmanuall'
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          pwsh terraform_conditional_run.ps1
+#     - task: AzureCLI@2
+#       inputs:
+#         azureSubscription: 'acrserviceconnectionmanuall'
+#         scriptType: 'pscore'
+#         scriptLocation: 'inlineScript'
+#         inlineScript: |
+#           pwsh terraform_conditional_run.ps1
+
+jobs:
+- job: Terraform
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - checkout: self
+
+  - task: PowerShell@2
+    displayName: "terraform $(Environment) deploy"
+    name: TerraformDeploy
+    inputs:
+      targetType: filePath
+      filePath: '$(Pipeline.Workspace)/terraformartifact/terraform_conditional_run.ps1'
+      arguments: '-deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+
+
+
