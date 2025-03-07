@@ -1,17 +1,22 @@
-parameters:
-  azureSubscription: "acrserviceconnectionmanuall"
+name: Manual Workflow
+
+on:
+  workflow_dispatch:
 
 jobs:
-- job: Terraform
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: self
+  Terraform:
+    runs-on: ubuntu-latest
 
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: ${{ parameters.azureSubscription }}
-      scriptType: 'pscore'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        pwsh terraform_conditional_run.ps1
+    parameters:
+      azureSubscription: "acrserviceconnectionmanuall"
+
+    steps:
+      - checkout: self
+
+      - task: AzureCLI@2
+        inputs:
+          azureSubscription: ${{ jobs.Terraform.parameters.azureSubscription }}
+          scriptType: 'pscore'
+          scriptLocation: 'inlineScript'
+          inlineScript: |
+            pwsh terraform_conditional_run.ps1
