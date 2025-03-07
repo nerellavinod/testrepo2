@@ -1,8 +1,7 @@
 param (
     [string]$ResourceGroupName,
     [string]$Location,
-    [string]$TerraformDirectory
-)
+  )
 
 # Ensure the required parameters are provided
 if (-not $ResourceGroupName -or -not $Location -or -not $TerraformDirectory) {

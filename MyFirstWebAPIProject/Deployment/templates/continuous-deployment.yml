@@ -26,6 +26,12 @@ parameters:
     default: false
   - name: AzureSubscription
     type: string
+  - name: ResourceGroupName
+    type: string
+  - name: Location
+    type: string
+  - name: TerraformDirectory
+    type: string
 
 steps:
 

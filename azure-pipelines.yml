@@ -10,9 +10,10 @@ variables:
   DeploymentPool: "Mare Nectaris"
   Container: "ukhydrographicoffice/terraform-azure-powershell-unzip:1.9.2"
   Environment: "Devtest"
-  DeploymentResourceGroupName: "your-resource-group-name"
-  DeploymentStorageAccountName: "your-storage-account-name"
-
+  DeploymentResourceGroupName: "testexample-resources-vin"
+  DeploymentStorageAccountName: "teststorageaccount12345v"
+  Location: "West Europe"
+  
 stages:
 - stage: Build
   jobs:
