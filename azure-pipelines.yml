@@ -89,3 +89,26 @@ steps:
 #        --resource-group containerrg \
 #        --image acrsqmbqafc.azurecr.io/$(imageName):latest                            
 #  displayName: 'Deploy to Azure Container App'
+
+################################
+- stage: Devdeploy
+  displayName: "Devdeploy (inc terraform, webapp deploy)"
+  variables:
+         
+  jobs:
+    - deployment: DevDeployTerraform
+      displayName: "Dev - Deploy Terraform"
+      environment: "S100PG-DEV"
+      pool: $(DeploymentPool)
+      container: ${{variables.Container}}
+      workspace:
+        clean: all
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - template: Deployment/templates/continuous-deployment.yml
+                parameters:
+                  ContinueEvenIfResourcesAreGettingDestroyed: ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }}
+                  AzureSubscription: "S-100 Permit Generator Dev - A.011.15.5"
+
