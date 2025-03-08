@@ -51,16 +51,16 @@ stages:
         docker tag $(imageName):$(Build.BuildId) testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
       displayName: 'Tag Docker Image'
 
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'acrserviceconnectionmanuall'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          az acr login --name testexampleregistryvin
-          docker push testexampleregistryvin.azurecr.io/$(imageName):latest
-          docker push testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
-      displayName: 'Push Docker Image to ACR'
+    # - task: AzureCLI@2
+    #   inputs:
+    #     azureSubscription: 'acrserviceconnectionmanuall'
+    #     scriptType: 'bash'
+    #     scriptLocation: 'inlineScript'
+    #     inlineScript: |
+    #       az acr login --name testexampleregistryvin
+    #       docker push testexampleregistryvin.azurecr.io/$(imageName):latest
+    #       docker push testexampleregistryvin.azurecr.io/$(imageName):$(Build.BuildId)
+    #   displayName: 'Push Docker Image to ACR'
 
 - stage: Deploy
   jobs:
