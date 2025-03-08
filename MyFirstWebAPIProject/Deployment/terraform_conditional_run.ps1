@@ -28,13 +28,22 @@ terraform import azurerm_container_registry.example /subscriptions/c3d246d3-988a
 # Import the existing storage account
 terraform import azurerm_storage_account.example /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/teststorageaccount12345v
 
-
 # Plan Terraform deployment
 terraform plan -out=tfplan
 
-Write-Output "This text is printing33"
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Terraform plan failed"
+    exit $LASTEXITCODE
+}
 
-az acr login --name testexampleregistryvin
+Write-Output "This text is printing33"
 
 # Apply Terraform deployment
 terraform apply -auto-approve tfplan
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Error "Terraform apply failed"
+    exit $LASTEXITCODE
+}
+
+Write-Output "This text is printing after apply"
