@@ -42,6 +42,8 @@ steps:
       targetType: filePath
       filePath: 'MyFirstWebAPIProject/Deployment/terraform_conditional_run.ps1'
       arguments: '-ResourceGroupName ${{ parameters.ResourceGroupName }} -Location ${{ parameters.Location }} -TerraformDirectory ${{ parameters.TerraformDirectory }} -deploymentResourceGroupName $(DeploymentResourceGroupName) -deploymentStorageAccountName $(DeploymentStorageAccountName) -workSpace $(Environment) -continueEvenIfResourcesAreGettingDestroyed ${{ parameters.ContinueEvenIfResourcesAreGettingDestroyed }} -terraformJsonOutputFile $(Pipeline.Workspace)/terraformartifact/terraform_output.json'
+    message: |
+      This text is printing
 
   - task: AzureCLI@2
     inputs:
@@ -50,6 +52,8 @@ steps:
       scriptLocation: 'inlineScript'
       inlineScript: |
         az --version
+    message: | 
+        This text is printing
 
   # - task: AzureCLI@2
   #   displayName: "terraformdeploy"
