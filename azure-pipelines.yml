@@ -80,7 +80,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az login
-          az account set --subscription "c3d246d3-988a-45ae-ba70-f7faac1e2d0a""
+          az account set --subscription "c3d246d3-988a-45ae-ba70-f7faac1e2d0a"
 
     - task: AzureCLI@2
       inputs:
