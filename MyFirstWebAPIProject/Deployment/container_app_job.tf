@@ -22,5 +22,5 @@ resource "azurerm_container_app_job" "example" {
 resource "azurerm_role_assignment" "acr_pull" {
   principal_id         = "2fcaebff-c565-49b9-905c-17b3f095ee21"
   role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.example.id
+   scope                = "/subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.ContainerRegistry/registries/testexampleregistryvin"
 }
