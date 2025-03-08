@@ -48,7 +48,7 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Output "This text is printing33"
 
-az acr login --name testexampleregistryvin
+#az acr login --name testexampleregistryvin
 
 # Apply Terraform deployment
 terraform apply -auto-approve tfplan
