@@ -14,7 +14,7 @@ variables:
   DeploymentStorageAccountName: "teststorageaccount12345v"
   Location: "West Europe"
   TerraformDirectory: "MyFirstWebAPIProject/Deployment"
-  
+
 stages:
 - stage: Build
   jobs:
@@ -82,6 +82,14 @@ stages:
           az login
           az account set --subscription "c3d246d3-988a-45ae-ba70-f7faac1e2d0a"
 
+    - task: PowerShell@2
+      displayName: "terraformDeploy"
+      name: TerraformDeploy
+      inputs:
+        targetType: filePath
+        filePath: 'MyFirstWebAPIProject/Deployment/terraform_conditional_run.ps1'
+        arguments: '-ResourceGroupName $(DeploymentResourceGroupName) -Location $(Location) -TerraformDirectory $(TerraformDirectory)'
+
     - task: AzureCLI@2
       inputs:
         azureSubscription: "acrserviceconnectionmanuall"
@@ -89,11 +97,3 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az --version
-
-    - template: MyFirstWebAPIProject/Deployment/templates/continuous-deployment.yml
-      parameters:
-        AzureSubscription: 'acrserviceconnectionmanuall'
-        ContinueEvenIfResourcesAreGettingDestroyed: false
-        ResourceGroupName: $(DeploymentResourceGroupName)
-        Location: $(Location)
-        TerraformDirectory: $(TerraformDirectory)
