@@ -51,3 +51,8 @@ variable "container_app_job_name" {
   type        = string
   default     = "test-example-jobvin"
 }
+variable "storage_account_name" {
+  description = "The name of the storage account"
+  type        = string
+  default     = "teststorageaccount12345v"
+}

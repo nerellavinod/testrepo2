@@ -34,5 +34,7 @@ terraform plan -out=tfplan
 
 Write-Output "This text is printing33"
 
+az acr login --name testexampleregistryvin
+
 # Apply Terraform deployment
 terraform apply -auto-approve tfplan

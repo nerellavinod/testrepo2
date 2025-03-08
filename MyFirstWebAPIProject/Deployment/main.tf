@@ -15,6 +15,14 @@ resource "azurerm_resource_group" "example" {
   location = var.location
 }
 
+resource "azurerm_storage_account" "example" {
+  name                     = "teststorageaccount12345v"
+  resource_group_name      = azurerm_resource_group.example.name
+  location                 = azurerm_resource_group.example.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+}
+
 resource "azurerm_container_registry" "example" {
   name                = var.container_registry_name
   resource_group_name = azurerm_resource_group.example.name
