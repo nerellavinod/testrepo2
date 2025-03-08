@@ -18,7 +18,7 @@ resource "azurerm_container_app" "example" {
   template {
     container {
       name   = "example-container"
-      image  = "${testexampleregistryvin.azurecr.io}/mycontainerapp:latest"
+      image  = "${azurerm_container_registry.example.login_server}/mycontainerapp:latest"
       cpu    = 0.5
       memory = "1.0Gi"
     }
