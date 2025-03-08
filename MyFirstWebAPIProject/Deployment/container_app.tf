@@ -26,7 +26,7 @@ resource "azurerm_container_app" "example" {
 }
 
 resource "azurerm_role_assignment" "example" {
-  principal_id         = azurerm_user_assigned_identity.example.principal_id
+  principal_id         = "2fcaebff-c565-49b9-905c-17b3f095ee21"
   role_definition_name = "AcrPull"
   scope                = azurerm_container_registry.example.id
 }

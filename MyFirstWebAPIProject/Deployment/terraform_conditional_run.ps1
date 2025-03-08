@@ -32,10 +32,10 @@ terraform import azurerm_storage_account.example /subscriptions/c3d246d3-988a-45
 terraform import azurerm_container_app_environment.example /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.App/managedEnvironments/test-example-environmentvin
 
 # Import the existing role assignment
-terraform import azurerm_role_assignment.example /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.Authorization/roleAssignments/9b254276-49b6-4e8d-89fe-35090577b7e3
+#terraform import azurerm_role_assignment.example /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.Authorization/roleAssignments/9b254276-49b6-4e8d-89fe-35090577b7e3
 
 # Import the existing role assignment
-terraform import azurerm_role_assignment.acr_pull /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.Authorization/roleAssignments/9b254276-49b6-4e8d-89fe-35090577b7e3
+#terraform import azurerm_role_assignment.acr_pull /subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.Authorization/roleAssignments/9b254276-49b6-4e8d-89fe-35090577b7e3
 
 
 # Plan Terraform deployment
