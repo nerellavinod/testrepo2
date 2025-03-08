@@ -21,4 +21,4 @@ terraform plan -out=tfplan
 Write-Output "This text is printing33"
 
 # Apply Terraform deployment
-#terraform apply -auto-approve tfplan
+terraform apply -auto-approve tfplan
