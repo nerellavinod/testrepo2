@@ -18,7 +18,7 @@ resource "azurerm_container_app" "example" {
   template {
     container {
       name   = "example-container"
-      image  = "${azurerm_container_registry.example.login_server}/mycontainerapp:latest"
+      image  = "testexampleregistryvin.azurecr.io/mycontainerapp:latest"
       cpu    = 0.5
       memory = "1.0Gi"
     }
@@ -28,5 +28,5 @@ resource "azurerm_container_app" "example" {
 resource "azurerm_role_assignment" "example" {
   principal_id         = "2fcaebff-c565-49b9-905c-17b3f095ee21"
   role_definition_name = "AcrPull"
-  scope                = azurerm_container_registry.example.id
+  scope                = "/subscriptions/c3d246d3-988a-45ae-ba70-f7faac1e2d0a/resourceGroups/testexample-resources-vin/providers/Microsoft.ContainerRegistry/registries/testexampleregistryvin"
 }
